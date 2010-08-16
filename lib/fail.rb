@@ -2,9 +2,14 @@
 # fail.rb
 #
 # Thanks to:
-# - kaiwren's wrest facebook example.
+# - kaiwren's wrest facebook example. (TODO: URL)
 # - Łukasz Pełsziński's blog post: Facebook REST API: The 
 #   hacker's way. (TODO: URL)
+#
+# Copyright (C) 2010 Edd Steel (edward.steel@gmail.com)
+#
+# Free software released under the GNU GPL 
+# version 3 or later (see LICENSE)
 #
 # TODO
 # - Recognise error responses
