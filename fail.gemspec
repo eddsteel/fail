@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
   design."
   s.files = %w( README.md LICENSE )
   s.files += Dir.glob("lib/**/*")
-  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "F A I L"]
+  s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "F A I L", "-c", "utf-8", "--all"]
 end
