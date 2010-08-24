@@ -195,6 +195,7 @@ module FAIL
 
     @@HOST = 'api.facebook.com'
     @@ENDPOINT = '/restserver.php?'
+    # TODO: really?
     @@USER_AGENT='Mozilla/5.0 (X11; U; Linux i686; en-GB; rv:1.9.1.7) Gecko/20100106 Ubuntu/9.10 (karmic) Firefox/3.5.7'
 
 		def persevere(&block)
