@@ -116,7 +116,8 @@ module FAIL
       http = https(host)
       headers['User-Agent'] = @@USER_AGENT
 			headers['Content-Type'] = 'application/x-www-form-urlencoded'
-      data_string = args.map{|k,v| "#{k.to_s}=#{v}" }.join('&')
+      data_string = form_data_string(args)
+
       debug("posting #{data_string} to #{endpoint} with headers: #{headers}")
       response = http.post(endpoint, data_string, headers).response
 			# thanks for the use of HTTP response codes facebook.
@@ -124,6 +125,20 @@ module FAIL
 				handle_error response.body
 			end
 			response
+    end
+
+    # Creates data string from args.
+    # Accepts args as map of key to either string or array
+    #
+    def form_data_string(args)
+      args.each do |k,v|
+        if v.respond_to? :join
+          args[k] = v.join ','
+        end
+      end
+
+      # TODO: replace with appropriate library method
+      args.map{|k,v| "#{k.to_s}=#{v}" }.join('&')
     end
 
 		def handle_error(doc)
