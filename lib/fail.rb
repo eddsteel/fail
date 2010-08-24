@@ -45,10 +45,13 @@ module FAIL
   class Facebook
     include XML
 
+    @@KEY = @@SECRET = nil
+
     # To set the key and secret either
     # store FAIL::Facebook.KEY and
     # FAIL::Facebook.SECRET or provide them here.
     def initialize(key=@@KEY, secret=@@SECRET)
+      raise "KEY and SECRET must be set in FAIL::Facebook" if key.nil? || secret.nil?
       @key = key
       @secret = secret
     end
