@@ -11,8 +11,6 @@
 # Free software released under the GNU GPL 
 # version 3 or later (see LICENSE)
 #
-# TODO
-# - Recognise error responses
 
 require 'net/http'
 require 'net/https'
