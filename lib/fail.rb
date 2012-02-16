@@ -66,25 +66,25 @@ module FAIL
       headers = {}
       headers['User-Agent'] = @@USER_AGENT
 
-			cookie_header = form_cookie_header(http.get('/login.php', headers).response['Set-Cookie'])
-			puts "cookie_header is #{cookie_header}"
+      cookie_header = form_cookie_header(http.get('/login.php', headers).response['Set-Cookie'])
+      puts "cookie_header is #{cookie_header}"
 
       headers['Cookie'] =  cookie_header
- 			headers['Content-Type'] = 'application/x-www-form-urlencoded'
+       headers['Content-Type'] = 'application/x-www-form-urlencoded'
 
       data = {}
       data[:api_key] = @key
       data[:email] = CGI::escape(email)
       data[:pass] = CGI::escape(password)
       data[:auth_token] = XML::parse(post('auth.createToken').body)['/auth_createToken_response/[]'].first.to_s
-			puts data[:auth_token]
+      puts data[:auth_token]
 
       # fake log-in
       post(nil, data, 'login.facebook.com', '/login.php?login_attempt=1', headers)
-			#
+      #
       # request session on same token
       doc = XML::parse(post('auth.getSession', :auth_token=>data[:auth_token]).body)
-			debug(doc.to_s)
+      debug(doc.to_s)
 
       @session_key = doc['//session_key'].first.text
       @secret = doc['//secret'].first.text
@@ -115,16 +115,16 @@ module FAIL
 
       http = https(host)
       headers['User-Agent'] = @@USER_AGENT
-			headers['Content-Type'] = 'application/x-www-form-urlencoded'
+      headers['Content-Type'] = 'application/x-www-form-urlencoded'
       data_string = form_data_string(args)
 
       debug("posting #{data_string} to #{endpoint} with headers: #{headers}")
       response = http.post(endpoint, data_string, headers).response
-			# thanks for the use of HTTP response codes facebook.
-			if /.*<error_response.*/ =~ response.body
-				handle_error response.body
-			end
-			response
+      # thanks for the use of HTTP response codes facebook.
+      if /.*<error_response.*/ =~ response.body
+        handle_error response.body
+      end
+      response
     end
 
     # Creates data string from args.
@@ -141,17 +141,17 @@ module FAIL
       args.map{|k,v| "#{k.to_s}=#{v}" }.join('&')
     end
 
-		def handle_error(doc)
-			doc = XML::parse(doc)
-			code = doc['error_response/error_code/[]'].first.to_s
-			status = doc['error_response/error_msg/[]'].first.to_s
-			debug("Error #{code}: #{status}")
-			debug(doc['//request_args'].first.to_s)
-			raise FacebookError, "Facebook said: Error #{code}: #{status}", caller
-		end
+    def handle_error(doc)
+      doc = XML::parse(doc)
+      code = doc['error_response/error_code/[]'].first.to_s
+      status = doc['error_response/error_msg/[]'].first.to_s
+      debug("Error #{code}: #{status}")
+      debug(doc['//request_args'].first.to_s)
+      raise FacebookError, "Facebook said: Error #{code}: #{status}", caller
+    end
 
     def method_missing(method, *args)
-      	Poster.new(self, method.to_s)
+        Poster.new(self, method.to_s)
     end
 
 
@@ -166,7 +166,7 @@ module FAIL
 
 
     def sign(args, secret=@secret)
-			debug "secret is #{secret}"
+      debug "secret is #{secret}"
       strings = {}
       args.each {|k,v| strings[k.to_s] = v}
       arg_string = strings.sort.map {|k,v| "#{k}=#{v}"}.join
@@ -177,7 +177,7 @@ module FAIL
       http = Net::HTTP.new(host, 443)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-			http
+      http
     end
     
     # implements 'facebook.<category>.<method>' calls
@@ -198,41 +198,41 @@ module FAIL
     # TODO: really?
     @@USER_AGENT='Mozilla/5.0 (X11; U; Linux i686; en-GB; rv:1.9.1.7) Gecko/20100106 Ubuntu/9.10 (karmic) Firefox/3.5.7'
 
-		def persevere(&block)
-			retry_count = 0
-			begin
-				retry_count++
-				yield
-			rescue SocketError
-				retry if retry_count < 3
-				raise FacebookError, "Unable to contact Facebook. Please check your connection", caller
-			end
-		end
+    def persevere(&block)
+      retry_count = 0
+      begin
+        retry_count++
+        yield
+      rescue SocketError
+        retry if retry_count < 3
+        raise FacebookError, "Unable to contact Facebook. Please check your connection", caller
+      end
+    end
   end
 
-	class Profile
-		@@fields = %w[uid name]
+  class Profile
+    @@fields = %w[uid name]
 
-		attr_reader :id, :name
+    attr_reader :id, :name
 
-		def initialize(id, name)
+    def initialize(id, name)
       @id = id
       @name = name
-		end
+    end
 
     def self.find(fb, id)
       self.find_all(fb, id)[0]
     end
 
-		# Finds and creates a profile for each uid. The profiles
-		# can be further limited with the &filter block, which
-		# should take one parameter (the profile's XML element) 
-		# which it can interrogate to decide whether to proceed (it
-		# returns true) or skip (it returns false)
-		# This method expects the profile's initialize method to
-		# accept the same number of arguments and in the same order
-		# as the @@fields variable, but they needn't be called the same.
-		# 
+    # Finds and creates a profile for each uid. The profiles
+    # can be further limited with the &filter block, which
+    # should take one parameter (the profile's XML element) 
+    # which it can interrogate to decide whether to proceed (it
+    # returns true) or skip (it returns false)
+    # This method expects the profile's initialize method to
+    # accept the same number of arguments and in the same order
+    # as the @@fields variable, but they needn't be called the same.
+    # 
     def self.find_all(fb, uids=fb.get_friends, &filter)
       debug("finding profiles of #{uids}.")
       doc = XML::parse(fb.users.getInfo(
@@ -250,10 +250,10 @@ module FAIL
 
       profiles.compact
     end
-	end
+  end
 
-	class FacebookError < StandardError
-	end
+  class FacebookError < StandardError
+  end
 
   def debug(msg)
     puts "[FB] " << msg if $DEBUG
