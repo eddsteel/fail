@@ -2,11 +2,11 @@
 # fail.rb
 #
 # Thanks to:
-# - kaiwren's wrest facebook example. (TODO: URL)
+# - kaiwren's wrest facebook example. (https://github.com/kaiwren/wrest/tree/master/examples/facebook_auth)
 # - Łukasz Pełsziński's blog post: Facebook REST API: The 
-#   hacker's way. (TODO: URL)
+#   hacker's way. (http://lukaszpelszynski.blogspot.com/2009/09/facebook-rest-api-hackers-way.html)
 #
-# Copyright (C) 2010 Edd Steel (edward.steel@gmail.com)
+# Copyright (C) 2010-2012 Edd Steel (edward.steel@gmail.com)
 #
 # Free software released under the GNU GPL 
 # version 3 or later (see LICENSE)
