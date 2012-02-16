@@ -21,23 +21,23 @@ in them.
 Populate the <code>@@fields</code> class variable, and provide a suitable
 initialize method, and FAIL will do the rest. e.g.:
 
-  class Profile < FAIL::Profile
-    include ParseDate
+    class Profile < FAIL::Profile
+      include ParseDate
 
-    @@fields = %w[uid name birthday_date]
-    attr_reader :id, :name, :birthday
+      @@fields = %w[uid name birthday_date]
+      attr_reader :id, :name, :birthday
 
-    def initialize(id, name, birthday_date)
-			super(id, name)
-      y,m,d = parsedate(birthday_date)[0..2]
-      y = 2010 
-      @birthday = Date.new(y, m, d)
+      def initialize(id, name, birthday_date)
+        super(id, name)
+        y,m,d = parsedate(birthday_date)[0..2]
+        y ||= 2010 
+        @birthday = Date.new(y, m, d)
+      end
+
+      def self.find_all(fb, uids=fb.get_friends)
+        super(fb, uids)
+      end
     end
-
-    def self.find_all(fb, uids=fb.get_friends)
-      super(fb, uids)
-		end
-  end
 
 With the above class, a call to Profile.find_all(facebook) with a logged in Facebook
 object will return a list of profiles with name and birthday filled out.
